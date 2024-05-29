@@ -14,7 +14,7 @@ This is an application for managing fruit supplies from different suppliers.
 
 * **Backend:** Java, Spring Framework, Hibernate.
 * **Frontend:** React
-* **Database:** MySQL
+* **Database:** PostgreSQL
 
 **Installation:**
 
