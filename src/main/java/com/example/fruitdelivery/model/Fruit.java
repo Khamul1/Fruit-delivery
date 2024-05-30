@@ -1,11 +1,13 @@
 package com.example.fruitdelivery.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Validated
@@ -17,8 +19,10 @@ public class Fruit {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
-    @JsonManagedReference
     private Supplier supplier;
+
+    @OneToMany(mappedBy = "fruit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FruitPrice> fruitPrices = new ArrayList<>();
 
     public Fruit(Long id, String type, String variety, int quantity, double weight, double cost, Supplier supplier) {
         this.id = id;
