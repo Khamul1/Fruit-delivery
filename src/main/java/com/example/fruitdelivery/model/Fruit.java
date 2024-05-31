@@ -17,41 +17,38 @@ public class Fruit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id")
+    @NotBlank(message = "Тип фрукта не может быть пустым")
+    private String type;
+
+    @NotBlank(message = "Сорт фрукта не может быть пустым")
+    private String variety;
+
+    @Min(value = 1, message = "Количество фруктов должно быть не менее 1")
+    private int quantity;
+
+    @Positive(message = "Вес фруктов должен быть положительным числом")
+    private double weight;
+
+    @Positive(message = "Стоимость фруктов должна быть положительным числом")
+    private double cost;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
     @OneToMany(mappedBy = "fruit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FruitPrice> fruitPrices = new ArrayList<>();
 
-    public Fruit(Long id, String type, String variety, int quantity, double weight, double cost, Supplier supplier) {
-        this.id = id;
+    public Fruit() {
+    }
+
+    public Fruit(String type, String variety, int quantity, double weight, double cost, Supplier supplier) {
         this.type = type;
         this.variety = variety;
         this.quantity = quantity;
         this.weight = weight;
         this.cost = cost;
         this.supplier = supplier;
-    }
-
-    @NotBlank(message = "Тип фрукта не может быть пустым") // Используем аннотацию @NotBlank из Spring Validator
-    private String type;
-
-    @NotBlank(message = "Сорт фрукта не может быть пустым") // Используем аннотацию @NotBlank из Spring Validator
-    private String variety;
-
-    @Min(value = 1, message = "Количество фруктов должно быть не менее 1") // Используем аннотацию @Min из Spring Validator
-    private int quantity;
-
-    @Positive(message = "Вес фруктов должен быть положительным числом") // Используем аннотацию @Positive из Spring Validator
-    private double weight;
-
-    @Positive(message = "Стоимость фруктов должна быть положительным числом") // Используем аннотацию @Positive из Spring Validator
-    private double cost;
-
-
-    public Fruit() {
-
     }
 
     public Long getId() {
@@ -108,5 +105,20 @@ public class Fruit {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public List<FruitPrice> getFruitPrices() {
+        return fruitPrices;
+    }
+
+    public void setFruitPrices(List<FruitPrice> fruitPrices) {
+        this.fruitPrices = fruitPrices;
+    }
+
+    public Long getSupplierId() {
+        return supplier.getId();
+    }
+    public void setSupplierId(Long supplierId) {
+        this.supplier.setId(supplierId);
     }
 }

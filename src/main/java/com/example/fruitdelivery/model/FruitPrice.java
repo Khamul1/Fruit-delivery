@@ -8,27 +8,37 @@ public class FruitPrice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fruit_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "fruit_id", nullable = false)
     private Fruit fruit;
 
+    @Column(nullable = false)
     private double price;
 
+    @Column(nullable = false)
     private LocalDate startDate;
 
+    @Column(nullable = false)
     private LocalDate endDate;
 
     public FruitPrice() {
-
     }
 
-    public FruitPrice(long id, Supplier supplier, Fruit fruit, double price, LocalDate startDate, LocalDate endDate) {
+    public FruitPrice(Supplier supplier, Fruit fruit, double price, LocalDate startDate, LocalDate endDate) {
+        this.supplier = supplier;
+        this.fruit = fruit;
+        this.price = price;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public FruitPrice(Long id, Supplier supplier, Fruit fruit, double price, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.supplier = supplier;
         this.fruit = fruit;
@@ -37,11 +47,11 @@ public class FruitPrice {
         this.endDate = endDate;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,11 +79,11 @@ public class FruitPrice {
         this.price = price;
     }
 
-    public LocalDate getStartDate() {  // Исправлено
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {  // Исправлено
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 

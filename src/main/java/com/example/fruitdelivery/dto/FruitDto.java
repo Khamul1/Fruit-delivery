@@ -7,7 +7,7 @@ public class FruitDto {
     private int quantity;
     private double weight;
     private double cost;
-    private Long supplierId; // Новое поле для ID поставщика
+    private Long supplierId;
 
     public FruitDto(Long id, String type, String variety, int quantity, double weight, double cost, Long supplierId) {
         this.id = id;
@@ -74,5 +74,7 @@ public class FruitDto {
     public void setCost(double cost) {
         this.cost = cost;
     }
+
+
 
 }
