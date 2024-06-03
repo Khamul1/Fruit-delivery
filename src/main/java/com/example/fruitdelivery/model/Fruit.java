@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
-import com.example.fruitdelivery.model.Supplier;
 
 @Entity
 public class Fruit {

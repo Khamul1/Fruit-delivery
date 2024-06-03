@@ -32,8 +32,7 @@ public class DeliveryService {
     @Autowired
     private DeliveryMapper deliveryMapper;
 
-    public DeliveryDto createDelivery(DeliveryDto deliveryDto) {
-        Delivery delivery = deliveryMapper.toEntity(deliveryDto);
+    public DeliveryDto createDelivery(DeliveryDto deliveryDto) {        Delivery delivery = deliveryMapper.toEntity(deliveryDto);
 
         // Рассчитываем общую стоимость доставки
         double totalCost = 0;
@@ -86,9 +85,7 @@ public class DeliveryService {
 
         // Создаем Map для хранения цен на фрукты
         Map<Long, FruitPrice> fruitPriceMap = fruitPrices.stream()
-                .collect(Collectors.toMap(fp -> fp.getFruit().getId(), fp -> fp));
-
-        List<DeliveryReportItemDto> deliveryReportItems = new ArrayList<>();
+                .collect(Collectors.toMap(fp -> fp.getFruit().getId(), fp -> fp));List<DeliveryReportItemDto> deliveryReportItems = new ArrayList<>();
         for (Delivery delivery : deliveries) {
             for (DeliveryItem item : delivery.getItems()) {
                 Fruit fruit = item.getFruit();
@@ -109,3 +106,4 @@ public class DeliveryService {
         return deliveryReportDto;
     }
 }
+

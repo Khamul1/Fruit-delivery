@@ -1,15 +1,28 @@
 package com.example.fruitdelivery.service;
 
+import com.example.fruitdelivery.dto.DeliveryDto;
+import com.example.fruitdelivery.dto.DeliveryReportDto;
+import com.example.fruitdelivery.dto.DeliveryReportItemDto;
 import com.example.fruitdelivery.dto.SupplierDto;
 import com.example.fruitdelivery.exception.ResourceNotFoundException;
+import com.example.fruitdelivery.model.Delivery;
+import com.example.fruitdelivery.model.DeliveryItem;
+import com.example.fruitdelivery.model.Fruit;
+import com.example.fruitdelivery.model.FruitPrice;
 import com.example.fruitdelivery.model.Supplier;
+import com.example.fruitdelivery.repository.DeliveryRepository;
+import com.example.fruitdelivery.repository.FruitPriceRepository;
+import com.example.fruitdelivery.repository.DeliveryMapper;
 import com.example.fruitdelivery.repository.SupplierRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,6 +49,14 @@ public class SupplierService {
 
     public SupplierDto createSupplier(SupplierDto supplierDto) {
         logger.info("Создание нового поставщика: {} с именем {} и адресом {}", supplierDto, supplierDto.getName(), supplierDto.getAddress());
+
+        // Проверка на дубликаты
+        Optional<Supplier> existingSupplier = supplierRepository.findByAddress(supplierDto.getAddress());
+        if (existingSupplier.isPresent()) {
+            // Если поставщик с таким адресом уже существует, выбросьте исключение или верните ошибку
+            throw new IllegalArgumentException("Поставщик с таким адресом уже существует");
+        }
+
         Supplier supplier = new Supplier(supplierDto.getName(), supplierDto.getAddress());
         Supplier createdSupplier = supplierRepository.save(supplier);
         return SupplierDto.fromEntity(createdSupplier);

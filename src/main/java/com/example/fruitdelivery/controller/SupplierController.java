@@ -10,8 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/suppliers")
@@ -54,5 +54,25 @@ public class SupplierController {
     public ResponseEntity<Void> deleteSupplier(@PathVariable Long id) {
         supplierService.deleteSupplier(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/delete_duplicates")
+    public ResponseEntity<String> deleteDuplicateSuppliers() {
+        List<SupplierDto> suppliers = supplierService.getAllSuppliers();
+
+        // Создайте список уникальных адресов
+        Set<String> uniqueAddresses = new HashSet<>();
+
+        // Создайте новый список поставщиков без дубликатов
+        List<SupplierDto> uniqueSuppliers = suppliers.stream()
+                .filter(supplier -> uniqueAddresses.add(supplier.getAddress()))
+                .collect(Collectors.toList());
+
+        // Удалите дубликаты из базы данных
+        suppliers.stream()
+                .filter(supplier -> !uniqueSuppliers.contains(supplier))
+                .forEach(supplier -> supplierService.deleteSupplier(supplier.getId()));
+
+        return ResponseEntity.ok("Duplicate suppliers deleted");
     }
 }
