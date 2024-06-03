@@ -70,7 +70,7 @@ Content-Type: application/json
 Retrieving the deliveries report:
 
 
-GET /api/deliveries/report?startDate=2024-06-01&endDate=2024-06-30
+``GET /api/deliveries/report?startDate=2024-06-01&endDate=2024-06-30``
 
 
 Example response:
