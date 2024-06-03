@@ -1,83 +1,58 @@
 package com.example.fruitdelivery.controller;
 
 import com.example.fruitdelivery.dto.SupplierDto;
-import com.example.fruitdelivery.model.Supplier;
-import com.example.fruitdelivery.repository.SupplierRepository;
+import com.example.fruitdelivery.exception.ResourceNotFoundException;
+import com.example.fruitdelivery.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/suppliers") // Измените путь
+@RequestMapping("api/suppliers")
+@Validated
 public class SupplierController {
 
-    private final SupplierRepository supplierRepository;
+    private final SupplierService supplierService;
 
     @Autowired
-    public SupplierController(SupplierRepository supplierRepository) {
-        this.supplierRepository = supplierRepository;
+    public SupplierController(SupplierService supplierService) {
+        this.supplierService = supplierService;
     }
 
     @GetMapping
-    public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
+    public List<SupplierDto> getAllSuppliers() {
+        return supplierService.getAllSuppliers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Supplier> getSupplierById(@PathVariable Long id) {
-        Optional<Supplier> supplier = supplierRepository.findById(id);
-        if (supplier.isPresent()) {
-            if (supplier.get().getAddress() == null) {
-                supplier.get().setAddress("Не указан");
-            }
-            return ResponseEntity.ok(supplier.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SupplierDto> getSupplierById(@PathVariable Long id) {
+        Optional<SupplierDto> supplierDto = supplierService.getSupplierById(id);
+        return supplierDto.map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException("Поставщик с ID " + id + " не найден"));
     }
-
 
     @PostMapping
-    public ResponseEntity<SupplierDto> createSupplier(@RequestBody SupplierDto supplierDto) {
-        // Создайте новый объект Supplier, используя данные из supplierDto
-        Supplier supplier = new Supplier(
-                supplierDto.getName(),
-                supplierDto.getAddress()
-        );
-
-        Supplier createdSupplier = supplierRepository.save(supplier);
-        SupplierDto responseDto = new SupplierDto(
-                createdSupplier.getId(),
-                createdSupplier.getName(),
-                supplierDto.getAddress()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    public ResponseEntity<SupplierDto> createSupplier(@Valid @RequestBody SupplierDto supplierDto) {
+        SupplierDto createdSupplier = supplierService.createSupplier(supplierDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSupplier);
     }
 
-
-
     @PutMapping("/{id}")
-    public ResponseEntity<Supplier> updateSupplier(@PathVariable Long id, @RequestBody SupplierDto supplierDto) {
-        Optional<Supplier> existingSupplier = supplierRepository.findById(id);
-        if (existingSupplier.isPresent()) {
-            Supplier supplierToUpdate = existingSupplier.get();
-            supplierToUpdate.setName(supplierDto.getName());
-            supplierToUpdate.setAddress(supplierDto.getAddress());
-
-            Supplier updatedSupplier = supplierRepository.save(supplierToUpdate);
-            return ResponseEntity.ok(updatedSupplier);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SupplierDto> updateSupplier(@PathVariable Long id, @Valid @RequestBody SupplierDto supplierDto) {
+        Optional<SupplierDto> updatedSupplier = supplierService.updateSupplier(id, supplierDto);
+        return updatedSupplier.map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException("Поставщик с ID " + id + " не найден"));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSupplier(@PathVariable Long id) {
-        supplierRepository.deleteById(id);
+        supplierService.deleteSupplier(id);
         return ResponseEntity.noContent().build();
     }
 }

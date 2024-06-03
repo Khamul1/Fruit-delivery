@@ -30,16 +30,7 @@ public class FruitPrice {
     public FruitPrice() {
     }
 
-    public FruitPrice(Supplier supplier, Fruit fruit, double price, LocalDate startDate, LocalDate endDate) {
-        this.supplier = supplier;
-        this.fruit = fruit;
-        this.price = price;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public FruitPrice(Long id, Supplier supplier, Fruit fruit, double price, LocalDate startDate, LocalDate endDate) {
-        this.id = id;
+    public FruitPrice(Long supplierId, Fruit fruit, double price, LocalDate startDate, LocalDate endDate) {
         this.supplier = supplier;
         this.fruit = fruit;
         this.price = price;

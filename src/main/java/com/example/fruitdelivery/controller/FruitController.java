@@ -1,6 +1,7 @@
 package com.example.fruitdelivery.controller;
 
 import com.example.fruitdelivery.dto.DeliveryDto;
+import com.example.fruitdelivery.dto.DeliveryItemDto;
 import com.example.fruitdelivery.dto.FruitDto;
 import com.example.fruitdelivery.dto.FruitPriceDto;
 import com.example.fruitdelivery.exception.ResourceNotFoundException;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,11 +27,14 @@ public class FruitController {
     private final DeliveryRepository deliveryRepository;
     private final FruitMapper fruitMapper;
     private final FruitService fruitService;
+    private final FruitPriceMapper fruitPriceMapper;
+    private final DeliveryMapper deliveryMapper;
 
     @Autowired
     public FruitController(FruitRepository fruitRepository, SupplierRepository supplierRepository,
                            FruitPriceService fruitPriceService, DeliveryRepository deliveryRepository,
-                           FruitMapper fruitMapper, FruitService fruitService, FruitPriceMapper fruitPriceMapper, DeliveryMapper deliveryMapper) {
+                           FruitMapper fruitMapper, FruitService fruitService, // Измените на FruitService
+                           FruitPriceMapper fruitPriceMapper, DeliveryMapper deliveryMapper) {
         this.fruitRepository = fruitRepository;
         this.supplierRepository = supplierRepository;
         this.fruitPriceService = fruitPriceService;
@@ -41,12 +44,6 @@ public class FruitController {
         this.fruitPriceMapper = fruitPriceMapper;
         this.deliveryMapper = deliveryMapper;
     }
-
-    @Autowired
-    private FruitPriceMapper fruitPriceMapper;
-
-    @Autowired
-    private DeliveryMapper deliveryMapper;
 
     @GetMapping
     public List<FruitDto> getAllFruits() {
@@ -84,10 +81,9 @@ public class FruitController {
     public ResponseEntity<DeliveryDto> createDelivery(@RequestBody DeliveryDto deliveryDto) {
         Supplier supplier = supplierRepository.findById(deliveryDto.getSupplierId())
                 .orElseThrow(() -> new ResourceNotFoundException("Поставщик не найден"));
-
         Delivery delivery = new Delivery();
         delivery.setSupplier(supplier);
-        delivery.setDeliveryDate(deliveryDto.getDeliveryDate());
+        delivery.setDeliveryDate(deliveryDto.getDeliveryDate());// Создание DeliveryItem из DeliveryItemDto
         List<DeliveryItem> deliveryItems = deliveryDto.getItems().stream()
                 .map(itemDto -> {
                     Fruit fruit = fruitRepository.findById(itemDto.getFruitId())
@@ -106,7 +102,7 @@ public class FruitController {
         responseDto.setDeliveryDate(createdDelivery.getDeliveryDate());
         responseDto.setItems(createdDelivery.getItems().stream()
                 .map(item -> {
-                    DeliveryDto.DeliveryItemDto itemDto = new DeliveryDto.DeliveryItemDto();
+                    DeliveryItemDto itemDto = new DeliveryItemDto();
                     itemDto.setFruitId(item.getFruit().getId());
                     itemDto.setQuantity(item.getQuantity());
                     return itemDto;
@@ -122,12 +118,13 @@ public class FruitController {
                 .orElseThrow(() -> new ResourceNotFoundException("Фрукт не найден"));
 
         FruitPrice fruitPrice = new FruitPrice(
-                fruit.getSupplier(),
+                fruitPriceDto.getSupplierId(),
                 fruit,
                 fruitPriceDto.getPrice(),
                 fruitPriceDto.getStartDate(),
                 fruitPriceDto.getEndDate()
         );
+
 
         FruitPrice createdFruitPrice = fruitPriceService.createFruitPrice(fruitPrice);
         return new ResponseEntity<>(new FruitPriceDto(
@@ -156,7 +153,7 @@ public class FruitController {
 
     @PutMapping("/{id}")
     public ResponseEntity<FruitDto> updateFruit(@PathVariable Long id, @RequestBody FruitDto fruitDto) {
-        Fruit fruitToUpdate = fruitService.getFruitById(id)
+        Fruit fruitToUpdate = fruitService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Фрукт с ID " + id + " не найден"));
         fruitToUpdate.setType(fruitDto.getType());
         fruitToUpdate.setVariety(fruitDto.getVariety());
@@ -180,9 +177,9 @@ public class FruitController {
 
     @PutMapping("/{id}/supplier")
     public ResponseEntity<FruitDto> updateFruitSupplier(@PathVariable Long id, @RequestParam Long supplierId) {
-        Fruit fruit = fruitService.getFruitById(id)
+        Fruit fruit = fruitService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Фрукт с ID " + id + " не найден"));
-        Fruit updatedFruit = fruitService.updateFruitSupplier(id, supplierId);
+        Fruit updatedFruit = fruitService.updateFruitSupplier(id, supplierId); // Используйте updateFruitSupplier из FruitService
         return ResponseEntity.ok(fruitMapper.toDto(updatedFruit));
     }
 }

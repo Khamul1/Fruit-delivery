@@ -1,5 +1,7 @@
 package com.example.fruitdelivery.dto;
 
+import com.example.fruitdelivery.model.Supplier;
+
 public class SupplierDto {
     private Long id;
     private String name;
@@ -33,6 +35,9 @@ public class SupplierDto {
         this.id = id;
         this.name = name;
         this.address = address;
+    }
+    public static SupplierDto fromEntity(Supplier supplier) {
+        return new SupplierDto(supplier.getId(), supplier.getName(), supplier.getAddress());
     }
 }
 

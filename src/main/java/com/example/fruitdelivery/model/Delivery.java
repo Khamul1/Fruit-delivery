@@ -1,4 +1,3 @@
-
 package com.example.fruitdelivery.model;
 
 import jakarta.persistence.*;
@@ -15,10 +14,13 @@ public class Delivery {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    @Column(name = "delivery_date")
     private LocalDate deliveryDate;
 
     @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeliveryItem> items;
+
+    private double totalCost;
 
     public Long getId() {
         return id;
@@ -50,5 +52,13 @@ public class Delivery {
 
     public void setItems(List<DeliveryItem> items) {
         this.items = items;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
     }
 }

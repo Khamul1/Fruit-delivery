@@ -24,6 +24,7 @@ public class FruitPriceService {
     }
 
     public FruitPrice createFruitPrice(FruitPrice fruitPrice) {
+        logger.info("Создание новой цены на фрукт: {}", fruitPrice);
         return fruitPriceRepository.save(fruitPrice);
     }
 

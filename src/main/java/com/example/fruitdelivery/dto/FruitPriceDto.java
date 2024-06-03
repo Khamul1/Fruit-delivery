@@ -4,9 +4,11 @@ import java.time.LocalDate;
 
 public class FruitPriceDto {
     private Long id;
+    private Long fruitId;
     private LocalDate startDate;
     private LocalDate endDate;
     private Double price;
+    private Long supplierId;
 
 
     public FruitPriceDto() {
@@ -17,6 +19,14 @@ public class FruitPriceDto {
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
     public Long getId() {
@@ -49,6 +59,14 @@ public class FruitPriceDto {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Long getFruitId() {
+        return fruitId;
+    }
+
+    public void setFruitId(Long fruitId) {
+        this.fruitId = fruitId;
     }
 
 }

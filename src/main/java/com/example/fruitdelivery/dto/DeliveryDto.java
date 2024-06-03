@@ -8,6 +8,7 @@ public class DeliveryDto {
     private LocalDate deliveryDate;
     private List<DeliveryItemDto> items;
 
+
     public Long getSupplierId() {
         return supplierId;
     }
@@ -32,25 +33,12 @@ public class DeliveryDto {
         this.items = items;
     }
 
-    public static class DeliveryItemDto {
-        private Long fruitId;
-        private int quantity;
-
-        public Long getFruitId() {
-            return fruitId;
+    public double getTotalCost() {
+        double totalCost = 0;
+        for (DeliveryItemDto item : items) {
+            totalCost += item.getQuantity() * item.getPrice();
         }
-
-        public void setFruitId(Long fruitId) {
-            this.fruitId = fruitId;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
+        return totalCost;
     }
 
 }

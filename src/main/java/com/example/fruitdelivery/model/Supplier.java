@@ -1,24 +1,23 @@
 package com.example.fruitdelivery.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Supplier {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String address;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
-    private List<Fruit> fruits = new ArrayList<>();
-
     public Supplier() {
+    }
+
+    public Supplier(Long id) {
+        this.id = id;
     }
 
     public Supplier(String name, String address) {
@@ -40,14 +39,6 @@ public class Supplier {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Fruit> getFruits() {
-        return fruits;
-    }
-
-    public void setFruits(List<Fruit> fruits) {
-        this.fruits = fruits;
     }
 
     public String getAddress() {

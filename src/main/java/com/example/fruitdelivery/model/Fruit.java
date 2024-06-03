@@ -1,18 +1,18 @@
 package com.example.fruitdelivery.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.fruitdelivery.model.Supplier;
 
 @Entity
-@Validated
 public class Fruit {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,14 +32,24 @@ public class Fruit {
     @Positive(message = "Стоимость фруктов должна быть положительным числом")
     private double cost;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @ManyToOne
     private Supplier supplier;
 
-    @OneToMany(mappedBy = "fruit", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FruitPrice> fruitPrices = new ArrayList<>();
+    
 
     public Fruit() {
+    }
+
+    public Fruit(Long id) {
+        this.id = id;
+    }
+
+    public Fruit(String type, String variety, int quantity, double weight, double cost) {
+        this.type = type;
+        this.variety = variety;
+        this.quantity = quantity;
+        this.weight = weight;
+        this.cost = cost;
     }
 
     public Fruit(String type, String variety, int quantity, double weight, double cost, Supplier supplier) {
@@ -105,20 +115,5 @@ public class Fruit {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
-    }
-
-    public List<FruitPrice> getFruitPrices() {
-        return fruitPrices;
-    }
-
-    public void setFruitPrices(List<FruitPrice> fruitPrices) {
-        this.fruitPrices = fruitPrices;
-    }
-
-    public Long getSupplierId() {
-        return supplier.getId();
-    }
-    public void setSupplierId(Long supplierId) {
-        this.supplier.setId(supplierId);
     }
 }

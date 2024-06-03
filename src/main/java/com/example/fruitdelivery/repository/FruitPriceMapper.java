@@ -3,14 +3,14 @@ package com.example.fruitdelivery.repository;
 import com.example.fruitdelivery.dto.FruitPriceDto;
 import com.example.fruitdelivery.model.FruitPrice;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring") // Укажите componentModel
+@Mapper(componentModel = "spring")
 public interface FruitPriceMapper {
 
-    FruitPriceMapper INSTANCE = Mappers.getMapper(FruitPriceMapper.class);
-
+    @Mapping(target = "fruitId", source = "fruit.id")
     FruitPriceDto toDto(FruitPrice fruitPrice);
 
+    @Mapping(target = "fruit.id", source = "fruitId")
     FruitPrice toEntity(FruitPriceDto fruitPriceDto);
 }
