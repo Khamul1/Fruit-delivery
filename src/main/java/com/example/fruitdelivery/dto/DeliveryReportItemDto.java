@@ -10,14 +10,12 @@ public class DeliveryReportItemDto {
     private double weightPerUnit;
     private double pricePerUnit;
     private Fruit fruit;
-
-
+    private double totalCost; // Общая стоимость
+    private double totalWeight; // Общий вес
 
     public Long getFruitId() {
         return fruitId;
     }
-
-
 
     public void setFruitId(Long fruitId) {
         this.fruitId = fruitId;
@@ -38,7 +36,6 @@ public class DeliveryReportItemDto {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 
     public double getWeightPerUnit() {
         return weightPerUnit;
@@ -78,5 +75,13 @@ public class DeliveryReportItemDto {
 
     public double getTotalWeight() {
         return quantity * weightPerUnit;
+    }
+
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
     }
 }
