@@ -1,12 +1,14 @@
 package com.example.fruitdelivery.dto;
 
+import com.example.fruitdelivery.model.FruitPrice;
+
 public class DeliveryItemDto {
 
     private Long id;
     private Long fruitId;
     private int quantity; // Количество в кг
     private double price;
-
+    private FruitPrice fruitPrice;
 
     public Long getId() {
         return id;
@@ -38,5 +40,17 @@ public class DeliveryItemDto {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public FruitPrice getFruitPrice() {
+        return fruitPrice;
+    }
+
+    public void setFruitPrice(FruitPrice fruitPrice) {
+        this.fruitPrice = fruitPrice;
+    }
+
+    public double getCost() {
+        return quantity * fruitPrice.getPrice();
     }
 }

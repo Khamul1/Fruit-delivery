@@ -7,7 +7,7 @@ public class DeliveryDto {
     private Long supplierId;
     private LocalDate deliveryDate;
     private List<DeliveryItemDto> items;
-
+    private double totalCost;
 
     public Long getSupplierId() {
         return supplierId;
@@ -34,11 +34,10 @@ public class DeliveryDto {
     }
 
     public double getTotalCost() {
-        double totalCost = 0;
-        for (DeliveryItemDto item : items) {
-            totalCost += item.getQuantity() * item.getPrice();
-        }
         return totalCost;
     }
 
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
 }

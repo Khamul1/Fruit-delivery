@@ -17,7 +17,13 @@ public class DeliveryMapperImpl implements DeliveryMapper {
     @Override
     public DeliveryDto toDto(Delivery delivery) {
         DeliveryDto deliveryDto = new DeliveryDto();
-        deliveryDto.setSupplierId(delivery.getSupplier().getId());
+        // Проверяем, не равен ли null объект Supplier перед вызовом getId
+        if (delivery.getSupplier() != null) {
+            deliveryDto.setSupplierId(delivery.getSupplier().getId());
+        } else {
+            // Устанавливаем значение по умолчанию для SupplierId
+            deliveryDto.setSupplierId(0L); // или выбросить исключение
+        }
         deliveryDto.setDeliveryDate(delivery.getDeliveryDate());
         deliveryDto.setItems(mapItems(delivery.getItems()));
         return deliveryDto;
@@ -32,7 +38,17 @@ public class DeliveryMapperImpl implements DeliveryMapper {
         return delivery;
     }
 
-    private List<DeliveryItemDto> mapItems(List<DeliveryItem> deliveryItems) {
+    @Override
+    public DeliveryItem toEntity(DeliveryItemDto deliveryItemDto) {
+        return null;
+    }
+
+    @Override
+    public DeliveryItemDto toDto(DeliveryItem deliveryItem) {
+        return null;
+    }
+
+    public List<DeliveryItemDto> mapItems(List<DeliveryItem> deliveryItems) {
         List<DeliveryItemDto> deliveryItemDtos = new ArrayList<>();
         for (DeliveryItem deliveryItem : deliveryItems) {
             DeliveryItemDto deliveryItemDto = new DeliveryItemDto();
@@ -44,7 +60,8 @@ public class DeliveryMapperImpl implements DeliveryMapper {
         return deliveryItemDtos;
     }
 
-    private List<DeliveryItem> mapItemsToEntity(List<DeliveryItemDto> deliveryItemDtos) {
+
+    public List<DeliveryItem> mapItemsToEntity(List<DeliveryItemDto> deliveryItemDtos) {
         List<DeliveryItem> deliveryItems = new ArrayList<>();
         for (DeliveryItemDto deliveryItemDto : deliveryItemDtos) {
             DeliveryItem deliveryItem = new DeliveryItem();
