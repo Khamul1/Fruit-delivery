@@ -1,14 +1,28 @@
 package com.example.fruitdelivery.dto;
 
 public class FruitDto {
+    // Идентификатор фрукта.
     private Long id;
+
+    // Тип фрукта
     private String type;
+
+    // Сорт фрукта (например, "Гренни Смит", "Кавендиш").
     private String variety;
+
+    // Количество фруктов.
     private int quantity;
+
+    // Вес фрукта.
     private double weight;
+
+    // Стоимость фрукта.
     private double cost;
+
+    // Идентификатор поставщика.
     private Long supplierId;
 
+    // Конструктор класса FruitDto.
     public FruitDto(Long id, String type, String variety, int quantity, double weight, double cost, Long supplierId) {
         this.id = id;
         this.type = type;
@@ -74,7 +88,4 @@ public class FruitDto {
     public void setCost(double cost) {
         this.cost = cost;
     }
-
-
-
 }

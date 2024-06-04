@@ -46,11 +46,11 @@ function DeliveryForm() {
             const response = await axios.post('/api/deliveries', deliveryDto);
             // Обработать ответ от сервера
             console.log(response.data);
-            setErrorMessage(null); // Сбросить сообщение об ошибке
+            setErrorMessage(null);
         } catch (error) {
             // Обработать ошибку
             console.error(error);
-            setErrorMessage(error.message); // Установить сообщение об ошибке
+            setErrorMessage(error.message);
         }
     };
 

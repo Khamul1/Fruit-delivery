@@ -14,6 +14,7 @@ import java.util.List;
 @Component
 public class DeliveryMapperImpl implements DeliveryMapper {
 
+    // Метод преобразует сущность Delivery в DTO DeliveryDto
     @Override
     public DeliveryDto toDto(Delivery delivery) {
         DeliveryDto deliveryDto = new DeliveryDto();
@@ -29,6 +30,7 @@ public class DeliveryMapperImpl implements DeliveryMapper {
         return deliveryDto;
     }
 
+    // Метод преобразует DTO DeliveryDto в сущность Delivery
     @Override
     public Delivery toEntity(DeliveryDto deliveryDto) {
         Delivery delivery = new Delivery();
@@ -38,16 +40,19 @@ public class DeliveryMapperImpl implements DeliveryMapper {
         return delivery;
     }
 
+    // Метод преобразует сущность DeliveryItem в DTO DeliveryItemDto
     @Override
     public DeliveryItem toEntity(DeliveryItemDto deliveryItemDto) {
         return null;
     }
 
+    // Метод преобразует DTO DeliveryItemDto в сущность DeliveryItem
     @Override
     public DeliveryItemDto toDto(DeliveryItem deliveryItem) {
         return null;
     }
 
+    // Вспомогательный метод, который преобразует список DeliveryItem в список DeliveryItemDto
     public List<DeliveryItemDto> mapItems(List<DeliveryItem> deliveryItems) {
         List<DeliveryItemDto> deliveryItemDtos = new ArrayList<>();
         for (DeliveryItem deliveryItem : deliveryItems) {
@@ -60,7 +65,7 @@ public class DeliveryMapperImpl implements DeliveryMapper {
         return deliveryItemDtos;
     }
 
-
+    // Вспомогательный метод, который преобразует список DeliveryItemDto в список DeliveryItem
     public List<DeliveryItem> mapItemsToEntity(List<DeliveryItemDto> deliveryItemDtos) {
         List<DeliveryItem> deliveryItems = new ArrayList<>();
         for (DeliveryItemDto deliveryItemDto : deliveryItemDtos) {

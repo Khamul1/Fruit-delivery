@@ -3,17 +3,29 @@ package com.example.fruitdelivery.dto;
 import java.time.LocalDate;
 
 public class FruitPriceDto {
+    // Идентификатор записи о цене.
     private Long id;
+
+    // Идентификатор фрукта.
     private Long fruitId;
+
+    // Дата начала действия цены.
     private LocalDate startDate;
+
+    // Дата окончания действия цены.
     private LocalDate endDate;
+
+    // Цена фрукта.
     private Double price;
+
+    // Идентификатор поставщика.
     private Long supplierId;
 
-
+    // Пустой конструктор.
     public FruitPriceDto() {
     }
 
+    // Конструктор с параметрами.
     public FruitPriceDto(Long id, LocalDate startDate, LocalDate endDate, Double price) {
         this.id = id;
         this.startDate = startDate;
@@ -68,5 +80,4 @@ public class FruitPriceDto {
     public void setFruitId(Long fruitId) {
         this.fruitId = fruitId;
     }
-
 }

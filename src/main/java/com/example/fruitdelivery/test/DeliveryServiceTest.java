@@ -21,9 +21,9 @@ import org.springframework.stereotype.Component; // Импортируйте п�
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Component // Используйте аннотацию Spring
+@Component
 public class DeliveryServiceTest {
 
     @Autowired

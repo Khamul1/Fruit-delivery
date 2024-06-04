@@ -53,7 +53,7 @@ public class SupplierService {
         // Проверка на дубликаты
         Optional<Supplier> existingSupplier = supplierRepository.findByAddress(supplierDto.getAddress());
         if (existingSupplier.isPresent()) {
-            // Если поставщик с таким адресом уже существует, выбросьте исключение или верните ошибку
+
             throw new IllegalArgumentException("Поставщик с таким адресом уже существует");
         }
 

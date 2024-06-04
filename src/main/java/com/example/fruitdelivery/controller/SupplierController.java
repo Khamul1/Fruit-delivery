@@ -25,11 +25,13 @@ public class SupplierController {
         this.supplierService = supplierService;
     }
 
+    // Получение списка всех поставщиков
     @GetMapping
     public List<SupplierDto> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
 
+    // Получение поставщика по ID
     @GetMapping("/{id}")
     public ResponseEntity<SupplierDto> getSupplierById(@PathVariable Long id) {
         Optional<SupplierDto> supplierDto = supplierService.getSupplierById(id);
@@ -37,12 +39,14 @@ public class SupplierController {
                 .orElseThrow(() -> new ResourceNotFoundException("Поставщик с ID " + id + " не найден"));
     }
 
+    // Создание нового поставщика
     @PostMapping
     public ResponseEntity<SupplierDto> createSupplier(@Valid @RequestBody SupplierDto supplierDto) {
         SupplierDto createdSupplier = supplierService.createSupplier(supplierDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSupplier);
     }
 
+    // Обновление поставщика по ID
     @PutMapping("/{id}")
     public ResponseEntity<SupplierDto> updateSupplier(@PathVariable Long id, @Valid @RequestBody SupplierDto supplierDto) {
         Optional<SupplierDto> updatedSupplier = supplierService.updateSupplier(id, supplierDto);
@@ -50,29 +54,33 @@ public class SupplierController {
                 .orElseThrow(() -> new ResourceNotFoundException("Поставщик с ID " + id + " не найден"));
     }
 
+    // Удаление поставщика по ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSupplier(@PathVariable Long id) {
         supplierService.deleteSupplier(id);
         return ResponseEntity.noContent().build();
     }
 
+    // Удаление дубликатов поставщиков
     @PostMapping("/delete_duplicates")
     public ResponseEntity<String> deleteDuplicateSuppliers() {
+        // Получаем список всех поставщиков
         List<SupplierDto> suppliers = supplierService.getAllSuppliers();
 
-        // Создайте список уникальных адресов
+        // Создаем список уникальных адресов
         Set<String> uniqueAddresses = new HashSet<>();
 
-        // Создайте новый список поставщиков без дубликатов
+        // Фильтруем список поставщиков, оставляя только тех, у которых уникальный адрес
         List<SupplierDto> uniqueSuppliers = suppliers.stream()
                 .filter(supplier -> uniqueAddresses.add(supplier.getAddress()))
                 .collect(Collectors.toList());
 
-        // Удалите дубликаты из базы данных
+        // Удаляем дубликаты из базы данных
         suppliers.stream()
                 .filter(supplier -> !uniqueSuppliers.contains(supplier))
                 .forEach(supplier -> supplierService.deleteSupplier(supplier.getId()));
 
-        return ResponseEntity.ok("Duplicate suppliers deleted");
+        // Возвращаем сообщение об успешном удалении дубликатов
+        return ResponseEntity.ok("Дубликаты поставщиков удалены");
     }
 }

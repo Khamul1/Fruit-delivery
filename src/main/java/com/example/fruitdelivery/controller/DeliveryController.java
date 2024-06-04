@@ -15,11 +15,13 @@ public class DeliveryController {
     @Autowired
     private DeliveryService deliveryService;
 
+    // Создание новой поставки
     @PostMapping
     public DeliveryDto createDelivery(@RequestBody DeliveryDto deliveryDto) {
         return deliveryService.createDelivery(deliveryDto);
     }
 
+    // Получение отчета о поставках за период
     @GetMapping("/report")
     public DeliveryReportDto getReport(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
         return deliveryService.getDeliveryReport(startDate, endDate);
